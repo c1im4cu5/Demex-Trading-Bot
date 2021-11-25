@@ -1,8 +1,6 @@
 # Demex-Trading-Bot
 
-Welcome to the Demex Exchange Trading Bot!
-
-The bot is designed to trade with asychronous access to strategies and websocket data. Because the bot is still in development, there may be missing storage files for trading pairs and candlesticks.  It can still be run from terminal with minimal changes to code.
+PLEASE NOTE: THIS IS AN ALTERED VERSION OF THE MAITEPORA DEMEX-BOT. It is meant to assist in supporting easy swap (Altering grid strategy for users to be able to swap on Demex with supported orderbook). c1im4cu5 is working with others from the exchange to support the feature for stable pairs. This version is meant to assist in that support. 
 
 ## Install Bot Instructions for Linux
 Required: Python 3.8 + <br>
