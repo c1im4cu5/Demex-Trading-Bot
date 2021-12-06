@@ -142,7 +142,7 @@ async def eth_treway(maximum, overage):
         root.info("No trades to perform. Sleeping for two minutes.")
         await asyncio.sleep(120)
         
- async def wbtc_treway(maximum, overage):
+async def wbtc_treway(maximum, overage):
     maximum = maximum
     overage=overage
     while True:
@@ -150,7 +150,7 @@ async def eth_treway(maximum, overage):
         root.info("No trades to perform. Sleeping for two minutes.")
         await asyncio.sleep(120)
         
- async def swth_treway(maximum, overage):
+async def swth_treway(maximum, overage):
     maximum = maximum
     overage=overage
     while True:
