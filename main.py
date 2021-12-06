@@ -56,7 +56,7 @@ async def on_error():
 async def on_connect():
     #candlestick granularity - allowed values: 1, 5, 15, 30, 60, 360, 1440
     return await demex.subscribe("Subscription", [
-                                                f"market_stats.{'market_stats'}",
+                                                #f"market_stats.{'market_stats'}",
                                                 f"books.{'wbtc1_usdc1'}",
                                                 f"books.{'eth1_wbtc1'}",
                                                 f"books.{'eth1_usdc1'}",
