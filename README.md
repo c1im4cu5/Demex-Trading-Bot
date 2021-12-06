@@ -25,7 +25,7 @@ https://tech.serhatteker.com/post/2019-12/upgrade-python38-on-ubuntu/
 - THIS IS AN IMPLEMENTATION OF Demex-Bot for special users. If you have not contacted c1im4cu5 in advance, please download the original version. This is for TESTING!!!
 ONLY DOWNLOAD FROM TRUSTED SITE - https://github.com/c1im4cu5/Demex-Trading-Bot
 ```
-git clone https://github.com/Mai-Te-Pora/Demex-Trading-Bot
+git clone https://github.com/c1im4cu5/Demex-Trading-Bot
 ```
 
 - Navigate to Demex-Bot dir
