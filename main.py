@@ -57,15 +57,11 @@ async def on_connect():
     #candlestick granularity - allowed values: 1, 5, 15, 30, 60, 360, 1440
     return await demex.subscribe("Subscription", [
                                                 f"market_stats.{'market_stats'}",
-                                                #f"books.{'wbtc1_usdc1'}",
-                                                #f"books.{'eth1_wbtc1'}",
-                                                #f"books.{'cel_eth'}",
-                                                #f"books.{'cel1_usdc1'}",
-                                                #f"books.{'eth1_usdc1'}",
-                                                #f"books.{'swth_usdc1'}",
-                                                #f"books.{'swth_eth1'}",
-                                                #f"books.{'swth_busd1'}",
-                                                #f"candlesticks.{'swth_usdc1'}.{15}",
+                                                f"books.{'wbtc1_usdc1'}",
+                                                f"books.{'eth1_wbtc1'}",
+                                                f"books.{'eth1_usdc1'}",
+                                                f"books.{'swth_usdc1'}",
+                                                f"books.{'swth_eth1'}",
                                                 #f"balances.{address}",
                                                 f"orders.{address}"])
 
@@ -113,7 +109,7 @@ async def on_receive(records: dict):
             CleaningRecords.cleaning_orderbooks(swth_eth)
             #Send to function for saving file
             SavingRecords.save_swth_eth_orderbook(swth_eth)
-        #Check if swth_eth books are in the "channel"
+        #Check if eth_usdc books are in the "channel"
         if 'books.eth1_usdc1' in records['channel']:
             #Send data to Receiving records, return back list of dicts; which are extended with updates
             eth_usdc.extend(ReceivingRecords.eth_usdc_book(records))
@@ -138,13 +134,53 @@ async def on_receive(records: dict):
             #Send to function for saving file
             SavingRecords.save_wbtc_usdc_orderbook(wbtc_usdc)
 
-async def bot_task():
+async def eth_treway(maximum, overage):
+    maximum = maximum
+    overage=overage
     while True:
-        Treway.analyze_eth("1.25", "0.0125")
+        Treway.analyze_eth(maximum, overage)
+        root.info("No trades to perform. Sleeping for two minutes.")
+        await asyncio.sleep(120)
+        
+ async def wbtc_treway(maximum, overage):
+    maximum = maximum
+    overage=overage
+    while True:
+        Treway.analyze_wbtc(maximum, overage)
+        root.info("No trades to perform. Sleeping for two minutes.")
+        await asyncio.sleep(120)
+        
+ async def swth_treway(maximum, overage):
+    maximum = maximum
+    overage=overage
+    while True:
+        Treway.analyze_swth(maximum, overage)
         root.info("No trades to perform. Sleeping for two minutes.")
         await asyncio.sleep(120)
 
 async def main():
+    
+    treway = input("Would you like to utilize Treway (yes/no): ")
+    if treway == 'yes':
+        s_t = input("Would you like to implement SWTH Treway bot (yes/no): ")
+        if s_t == 'yes':
+            st_max = input("Quantity SWTH: ")
+            st_overage = input("Overage Quantity: ")
+            st_max = str(st_max)
+            st_overage = str(st_overage)
+        e_t = input("Would you like to implement ETH Treway bot (yes/no): ")
+        if e_t == 'yes':
+            et_max = input("Quantity ETH: ")
+            et_overage = input("Overage Quantity: ")
+            et_max = str(et_max)
+            et_overage = str(et_overage)
+        w_t = input("Would you like to implement WBTC Treway bot (yes/no): ")
+        if w_t == 'yes':
+            wt_max = input("Quantity WBTC: ")
+            wt_overage = input("Overage Quantity: ")
+            wt_max = str(wt_max)
+            wt_overage = str(wt_overage)
+            
     orders = []
 
     #Print any active orders (FOR EXPERIENCED USERS)
@@ -168,13 +204,60 @@ async def main():
 
     #Create Websocket asyncio task
     socket = asyncio.create_task(demex.connect(on_receive, on_connect))
-    #Create Treway Bot task via bot_task function
-
-    #Gather and run functions concurrently
-    asyncio.gather(
-                    asyncio.get_event_loop().run_until_complete(await socket)
-                    #asyncio.get_event_loop().run_until_complete(await bot)
-                    )
+    if s_t == 'yes' and e_t == 'yes' and w_t == 'yes':
+        swth_treway_bot = asyncio.create_task(swth_treway(st_max, st_overage))
+        eth_treway_bot = asyncio.create_task(eth_treway(et_max, et_overage))
+        wbtc_treway_bot = asyncio.create_task(wbtc_treway(wt_max, wt_overage))
+        #Gather and run functions concurrently
+        asyncio.gather(
+                        asyncio.get_event_loop().run_until_complete(await socket),
+                        asyncio.get_event_loop().run_until_complete(await swth_treway_bot),
+                        asyncio.get_event_loop().run_until_complete(await eth_treway_bot),
+                        asyncio.get_event_loop().run_until_complete(await wbtc_treway_bot)
+                        )
+    elif s_t == 'yes' and e_t == 'no' and w_t == 'no':
+        swth_treway_bot = asyncio.create_task(swth_treway(st_max, st_overage))
+        #Gather and run functions concurrently
+        asyncio.gather(
+                        asyncio.get_event_loop().run_until_complete(await socket),
+                        asyncio.get_event_loop().run_until_complete(await swth_treway_bot)
+                        )  
+    elif s_t == 'yes' and e_t == 'yes' and w_t == 'no':
+        swth_treway_bot = asyncio.create_task(swth_treway(st_max, st_overage))
+        eth_treway_bot = asyncio.create_task(eth_treway(et_max, et_overage))
+        #Gather and run functions concurrently
+        asyncio.gather(
+                        asyncio.get_event_loop().run_until_complete(await socket),
+                        asyncio.get_event_loop().run_until_complete(await swth_treway_bot),
+                        asyncio.get_event_loop().run_until_complete(await eth_treway_bot)
+                        )
+    elif s_t == 'no' and e_t == 'yes' and w_t == 'no':
+        eth_treway_bot = asyncio.create_task(eth_treway(et_max, et_overage))
+        #Gather and run functions concurrently
+        asyncio.gather(
+                        asyncio.get_event_loop().run_until_complete(await socket),
+                        asyncio.get_event_loop().run_until_complete(await eth_treway_bot)
+                        )
+    elif s_t == 'no' and e_t == 'yes' and w_t == 'yes':
+        wbtc_treway_bot = asyncio.create_task(wbtc_treway(wt_max, wt_overage))
+        eth_treway_bot = asyncio.create_task(eth_treway(et_max, et_overage))
+        #Gather and run functions concurrently
+        asyncio.gather(
+                        asyncio.get_event_loop().run_until_complete(await socket),
+                        asyncio.get_event_loop().run_until_complete(await wbtc_treway_bot),
+                        asyncio.get_event_loop().run_until_complete(await eth_treway_bot)
+                        )
+    elif s_t == 'no' and e_t == 'no' and w_t == 'yes':
+        wbtc_treway_bot = asyncio.create_task(wbtc_treway(wt_max, wt_overage))
+        #Gather and run functions concurrently
+        asyncio.gather(
+                        asyncio.get_event_loop().run_until_complete(await socket),
+                        asyncio.get_event_loop().run_until_complete(await wbtc_treway_bot)
+                        )
+    else:
+        asyncio.gather(
+                        asyncio.get_event_loop().run_until_complete(await socket)
+                        )
 
 if __name__ == '__main__':
     demex: DemexWebsocket = DemexWebsocket('wss://ws.dem.exchange/ws')
