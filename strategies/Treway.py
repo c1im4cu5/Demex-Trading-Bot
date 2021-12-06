@@ -32,8 +32,8 @@ logger = logging.getLogger()
 p = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def analyze_wbtc(wbtc_max_quantity, over):
-    wbtc_max_quantity = wbtc_max_quantity
-    over = over
+    wbtc_max_quantity = float(wbtc_max_quantity)
+    over = float(over)
 
     with open(p + r"/data_processing/storage/orderbooks/eth_usdc_orderbook.json", "r") as read_file:
         eth_usdc_orderbook = pd.read_json(read_file)
@@ -202,8 +202,8 @@ def analyze_wbtc(wbtc_max_quantity, over):
         logger.info("No Trades Recommended")
 
 def analyze_swth(swth_max_quantity, over):
-    swth_max_quantity = swth_max_quantity
-    over = over
+    swth_max_quantity = float(swth_max_quantity)
+    over = float(over)
 
     with open( p + r"/data_processing/storage/orderbooks/swth_usdc_orderbook.json", "r") as read_file:
         swth_usdc_orderbook = pd.read_json(read_file)
@@ -363,8 +363,8 @@ def analyze_swth(swth_max_quantity, over):
         logger.info("No Trades Recommended")
 
 def analyze_eth(eth_max_quantity, over):
-    eth_max_quantity = eth_max_quantity
-    over = over
+    eth_max_quantity = float(eth_max_quantity)
+    over = float(over)
 
     with open( p + r"/data_processing/storage/orderbooks/wbtc_usdc_orderbook.json", "r") as read_file:
         wbtc_usdc_orderbook = pd.read_json(read_file)
