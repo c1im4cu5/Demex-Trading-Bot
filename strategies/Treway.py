@@ -25,7 +25,7 @@ eth_max_quantity = 0.125
 swth_min_quantity_extra = 180
 eth_min_quantity_extra = 0.00025
 
-dem_client = demex_auth.auth_client()
+dem_client = demex_auth.dem_client()
 
 logger = logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger()
