@@ -280,6 +280,10 @@ def cascade_choices():
     pair = input("Trading pair (Ex: wbtc1_usdc1, eth1_usdc1): ")
     side = input("Would you like to build buy or sell orders (buy/sell): ")
     order_style = input("Would you like to use linear or cascade order creation (linear/cascade): ")
+    if order_style == 'cascade':
+        cascade_type = input('Would you like to build ascending or descending orders (a/d): "
+    else:
+        cascade_type = 'n'
     total_quantity = input("Max quantity to use for order building: ")
     num_orders = input("Max number of orders to build (If cascade: Min=3, Max=16): ")
     start_price = input("Starting price for order build: ")
@@ -291,6 +295,7 @@ def cascade_choices():
                 'pair': pair,
                 'side': side,
                 'order_style': order_style,
+                'cascade_type': cascade_type,
                 'total_quantity': float(total_quantity),
                 'num_orders': int(num_orders),
                 'start_price': float(start_price),
